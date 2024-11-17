@@ -23,6 +23,7 @@ Route::group(['prefix' => 'homeswap'], function () {
         Route::get('/my-all', [HomeSwapController::class, 'myAllHomeSwap']);
         Route::post('/store', [HomeSwapController::class, 'store']);
         Route::post('/update/{id}', [HomeSwapController::class, 'update']);
+        Route::get('/publish/{id}', [HomeSwapController::class, 'publish']);
 
         Route::get('/deactivate/{id}', [HomeSwapController::class, 'deactivateHomeSwap']);
         Route::get('/activate/{id}', [HomeSwapController::class, 'activateHomeSwap']);
@@ -36,6 +37,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'wishlist'], function () {
     Route::get('get-all', [WishListController::class, 'getAll']);
     Route::post('store', [WishListController::class, 'store']);
     Route::get('remove/{id}', [WishListController::class, 'remove']);
+});
+
+//list-offer
+Route::group(['middleware' => 'auth', 'prefix' => 'list-offer'], function () {
+    Route::get('my-offers/{status}', [ListOfferController::class, 'myListOffers']);
+    Route::post('offer-an-exchange/{list_id}', [ListOfferController::class, 'offerAnExchange']);
+    Route::get('owner-pre-approve/{list_offer_id}', [ListOfferController::class, 'ownerPreApproveOffer']);
+    Route::post('owner-cancel/{list_offer_id}', [ListOfferController::class, 'ownerCancelOffer']);
 });
 
 

@@ -16,8 +16,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('created_by');
             $table->string('list_type'); //homeswap, nonswap
-            $table->unsignedBigInteger('non_swap_id')->nullable();
-            $table->unsignedBigInteger('home_swap_id')->nullable();
+            $table->unsignedBigInteger('list_id')->nullable();
 
             $table->timestamps();
         });

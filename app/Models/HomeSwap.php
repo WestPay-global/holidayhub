@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class HomeSwap extends Model
 {
     use HasFactory;
+
+    //list owner
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Web\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use App\Models\WishList;
+use App\Models\HomeSwap;
+use App\Models\NonSwap;
 
 class WishListController extends Controller
 {
@@ -30,19 +33,18 @@ class WishListController extends Controller
         try {
             $user = Auth::user();
 
-            if (isset($request->home_swap_id)) {
-                $wishList = WishList::where('created_by', $user->id)->where('home_swap_id', $request->home_swap_id)->first();
-            }
-            if (isset($request->non_swap_id)) {
-                $wishList = WishList::where('created_by', $user->id)->where('non_swap_id', $request->non_swap_id)->first();
+            $listType = $request->list_type; //hidden field
+            $list = $listType == 'homeswap' ? HomeSwap::findOrFail($request->list_id) : NonSwap::findOrFail($request->list_id);
+
+            //u cannot make-offer on ur own list
+            if ($list->created_by == $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Unauthorized process",
+                ]);
             }
 
-            // $wishList = WishList::where('created_by', $user->id)
-            // ->when(isset($request->home_swap_id), function ($query) use ($request) {
-            //     $query->where('home_swap_id', $request->home_swap_id);
-            // })
-            // ->orWhere('non_swap_id', $request->non_swap_id)
-            // ->first();
+            $wishList = WishList::where('created_by', $user->id)->where('list_type', $request->list_type)->where('list_id', $request->list_id)->first();
 
             if ($wishList) {
                 return response()->json([
@@ -54,8 +56,7 @@ class WishListController extends Controller
             $wishList = new WishList();
             $wishList->created_by = $user->id;
             $wishList->list_type = $request->list_type; //homeswap, nonswap
-            $wishList->non_swap_id = $request->non_swap_id ? $request->non_swap_id : null;
-            $wishList->home_swap_id = $request->home_swap_id ? $request->home_swap_id : null;
+            $wishList->list_id = $request->list_id;
             $wishList->save();
 
             return response()->json([

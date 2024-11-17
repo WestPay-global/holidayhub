@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->longText('unique_key')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('seeker_id')->nullable();
+            $table->unsignedBigInteger('seeker_id')->nullable(); //user that made offer(offer an exchange)
+            $table->string('list_type')->default('homeswap');
 
             //choose the ones that accurately describe ur place
             $table->json('decribe_place_features')->nullable();

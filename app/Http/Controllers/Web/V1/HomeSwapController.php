@@ -276,6 +276,44 @@ class HomeSwapController extends Controller
         }
     }
 
+    public function publish(string $id) {
+        $user = Auth::user();
+        try {
+            $homeSwap = HomeSwap::findOrFail($id);
+
+            //u cannot publish what u didn't create
+            if ($homeSwap->created_by !== $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Unauthorized process",
+                ]);
+            }
+
+            if ($homeSwap->status == 'completed') {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'HomeSwap already published',
+                    'data' => $homeSwap
+                ]);
+            }
+
+            $homeSwap->status = 'completed';
+            $homeSwap->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'HomeSwap published successfully',
+                'data' => $homeSwap
+            ]);
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th
+            ], 404);
+        }
+    }
+
     public function deactivateHomeSwap(string $id)
     {
         $user = Auth::user();
