@@ -70,6 +70,7 @@ return new class extends Migration
             //set rules
             $table->json('set_rules')->nullable();
 
+            $table->string('previous_status')->default('draft'); //used in deactivation/activation actions
             $table->string('status')->default('draft');
 
             $table->timestamps();

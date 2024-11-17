@@ -67,6 +67,7 @@ class HomeSwapSeeder extends Seeder
 
                 'set_rules' => json_encode(['Suitable for infants', 'Suitable for children', 'Pets allowed']),
 
+                'previous_status' => 'completed',
                 'status' => 'completed',
 
                 'created_at' => Carbon::now(),
@@ -123,6 +124,7 @@ class HomeSwapSeeder extends Seeder
 
                 'set_rules' => json_encode(['Suitable for infants', 'Suitable for children', 'Pets allowed']),
 
+                'previous_status' => 'completed',
                 'status' => 'completed',
 
                 'created_at' => Carbon::now(),
@@ -179,6 +181,7 @@ class HomeSwapSeeder extends Seeder
 
                 'set_rules' => json_encode(['Suitable for infants', 'Suitable for children', 'Pets allowed']),
 
+                'previous_status' => 'completed',
                 'status' => 'completed',
 
                 'created_at' => Carbon::now(),

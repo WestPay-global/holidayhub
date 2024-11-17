@@ -12,21 +12,23 @@ Route::group(['prefix' => 'auth'], function () {
     ////forgot password
     // Route::post('forgot-password', 'ForgotPasswordController@sendResetLink');
     // Route::post('reset-password', 'ForgotPasswordController@resetPassword');
-    // Route::post('change-password', 'ForgotPasswordController@changePassword')->middleware('auth');
+    // Route::post('change-password', 'ForgotPasswordController@changePassword');
 });
 
 Route::group(['prefix' => 'homeswap'], function () {
     Route::get('/all', [HomeSwapController::class, 'allHomeSwap']);
     Route::get('/single/{id}', [HomeSwapController::class, 'singleHomeSwap']);
+
+    Route::group(['middleware' => 'auth'], function () {
+        Route::get('/my-all', [HomeSwapController::class, 'myAllHomeSwap']);
+        Route::post('/store', [HomeSwapController::class, 'store']);
+        Route::post('/update/{id}', [HomeSwapController::class, 'update']);
+
+        Route::get('/deactivate/{id}', [HomeSwapController::class, 'deactivateHomeSwap']);
+        Route::get('/activate/{id}', [HomeSwapController::class, 'activateHomeSwap']);
+        Route::get('/delete/{id}', [HomeSwapController::class, 'deleteHomeSwap']);
+
+    });
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'homeswap'], function () {
-    Route::get('/my-swaps', [HomeSwapController::class, 'myTasks']);
-    Route::get('/single-swap/{id}', [HomeSwapController::class, 'singleTask']);
-    Route::post('/store', [HomeSwapController::class, 'store']);
-    Route::post('/update-swap/{id}', [HomeSwapController::class, 'updateTask']);
-    // Route::get('/task-offers/{task_id?}', [HomeSwapController::class, 'taskOffers']);
-    // Route::get('/single-offer/{task_offer_id}', [HomeSwapController::class, 'singleOffer']);
-    // Route::post('/accept-offer/{task_offer_id}', [HomeSwapController::class, 'acceptOffer']);
-    // Route::post('/confirm-payment', [HomeSwapController::class, 'confirmPayment']);
-});
+

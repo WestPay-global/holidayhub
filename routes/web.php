@@ -13,6 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('login', function () {
+    $errors = [];
+    // array_push($errors, ['success'=>false, 'code' => 'auth-001', 'message' => 'Unauthenticated.', 'headers' => $request->bearerToken()]);
+    array_push($errors, ['success'=>false, 'code' => 'auth-001', 'message' => 'Unauthenticated.']);
+    return response()->json([
+        'errors' => $errors,
+    ], 401);
+})->name('login');
+
 Route::get('/', function () {
     return view('welcome');
 });
