@@ -31,4 +31,11 @@ Route::group(['prefix' => 'homeswap'], function () {
     });
 });
 
+//wishlists
+Route::group(['middleware' => 'auth', 'prefix' => 'wishlist'], function () {
+    Route::get('get-all', [WishListController::class, 'getAll']);
+    Route::post('store', [WishListController::class, 'store']);
+    Route::get('remove/{id}', [WishListController::class, 'remove']);
+});
+
 
