@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('decribe_place_features')->nullable();
 
             //share with visitors what your place has to offer
-            $table->json('what_place_offer')->nullable();
+            $table->json('what_place_offer_visitors')->nullable();
 
             //describe a few essential details about your place
             $table->string('bedrooms')->nullable();
@@ -38,14 +38,17 @@ return new class extends Migration
             $table->string('place_address')->nullable();
 
             //swap details
-            $table->string('preferred_location_latitude')->nullable();
-            $table->string('preferred_location_longitude')->nullable();
-            $table->string('preferred_location_city')->nullable();
-            $table->string('preferred_location_state')->nullable();
-            $table->string('preferred_location_country')->nullable();
-            $table->string('preferred_location_address')->nullable();
+            $table->string('preferred_holiday_location_latitude')->nullable();
+            $table->string('preferred_holiday_location_longitude')->nullable();
+            $table->string('preferred_holiday_location_city')->nullable();
+            $table->string('preferred_holiday_location_state')->nullable();
+            $table->string('preferred_holiday_location_country')->nullable();
+            $table->string('preferred_holiday_location_address')->nullable();
 
-            $table->string('date_available')->nullable();
+            $table->boolean('open_to_any_location')->default(false);
+
+            $table->date('start_date_to_travel')->nullable(); //Y-m-d
+            $table->date('end_date_to_travel')->nullable(); //
             $table->string('swap_type')->default('simultaneous'); //non-simultaneous
 
             $table->json('place_pictures')->default('place_pictures'); //

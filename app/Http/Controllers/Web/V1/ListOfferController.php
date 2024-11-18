@@ -154,13 +154,19 @@ class ListOfferController extends Controller
      * Display the specified resource.
      * pending, upcoming, completed, cancelled
      */
-    public function myListOffers($status)
+    public function myListOffers($status, $list_type)
     {
         $user = Auth::user();
 
-        $listOffers = $status == 'all' ?
+        if ($list_type=="homeswap") {
+            $listOffers = $status == 'all' ?
             ListOffer::with(['seeker', 'homeswaplist'])->where('owner_id', $user->id)->where('list_type', 'homeswap')->get() :
             ListOffer::with(['seeker', 'homeswaplist'])->where('owner_id', $user->id)->where('list_type', 'homeswap')->where('status',$status)->get();
+        } else {
+            $listOffers = $status == 'all' ?
+            ListOffer::with(['seeker', 'nonswaplist'])->where('owner_id', $user->id)->where('list_type', 'nonswap')->get() :
+            ListOffer::with(['seeker', 'nonswaplist'])->where('owner_id', $user->id)->where('list_type', 'nonswap')->where('status',$status)->get();
+        }
 
         return response()->json([
             'success' => true,

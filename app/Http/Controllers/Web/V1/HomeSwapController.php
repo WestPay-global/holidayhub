@@ -75,7 +75,7 @@ class HomeSwapController extends Controller
 
                 $homeSwap->decribe_place_features = !empty($data['decribe_place_features']) ? json_encode($data['decribe_place_features']) : null;
 
-                $homeSwap->what_place_offer = !empty($data['what_place_offer']) ? json_encode($data['what_place_offer']) : null;
+                $homeSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
                 $homeSwap->bedrooms = $data['bedrooms'] ?? null;
                 $homeSwap->beds = $data['beds'] ?? null;
@@ -88,14 +88,18 @@ class HomeSwapController extends Controller
                 $homeSwap->place_country = $data['place_country'] ?? null;
                 $homeSwap->place_address = $data['place_address'] ?? null;
 
-                $homeSwap->preferred_location_latitude = $data['preferred_location_latitude'] ?? null;
-                $homeSwap->preferred_location_longitude = $data['preferred_location_longitude'] ?? null;
-                $homeSwap->preferred_location_city = $data['preferred_location_city'] ?? null;
-                $homeSwap->preferred_location_state = $data['preferred_location_state'] ?? null;
-                $homeSwap->preferred_location_country = $data['preferred_location_country'] ?? null;
-                $homeSwap->preferred_location_address = $data['preferred_location_address'] ?? null;
+                $homeSwap->preferred_holiday_location_latitude = $data['preferred_holiday_location_latitude'] ?? null;
+                $homeSwap->preferred_holiday_location_longitude = $data['preferred_holiday_location_longitude'] ?? null;
+                $homeSwap->preferred_holiday_location_city = $data['preferred_holiday_location_city'] ?? null;
+                $homeSwap->preferred_holiday_location_state = $data['preferred_holiday_location_state'] ?? null;
+                $homeSwap->preferred_holiday_location_country = $data['preferred_holiday_location_country'] ?? null;
+                $homeSwap->preferred_holiday_location_address = $data['preferred_holiday_location_address'] ?? null;
 
-                $homeSwap->date_available = $data['date_available'] ?? null;
+                $homeSwap->open_to_any_location = $data['open_to_any_location'] ?? false;
+
+                $homeSwap->start_date_to_travel = $data['start_date_to_travel'] ? Carbon::parse($request->start_date_to_travel)->format('Y-m-d') : null;
+                $homeSwap->end_date_to_travel = $data['end_date_to_travel'] ? Carbon::parse($request->end_date_to_travel)->format('Y-m-d') : null;
+
                 $homeSwap->swap_type = $data['swap_type'] ?? null;
 
                 $homeSwap->place_pictures = !empty($data['place_pictures']) ? json_encode($data['place_pictures']) : null;
@@ -127,7 +131,7 @@ class HomeSwapController extends Controller
 
                 $homeSwap->decribe_place_features = !empty($data['decribe_place_features']) ? json_encode($data['decribe_place_features']) : null;
 
-                $homeSwap->what_place_offer = !empty($data['what_place_offer']) ? json_encode($data['what_place_offer']) : null;
+                $homeSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
                 $homeSwap->bedrooms = $data['bedrooms'] ?? null;
                 $homeSwap->beds = $data['beds'] ?? null;
@@ -140,14 +144,18 @@ class HomeSwapController extends Controller
                 $homeSwap->place_country = $data['place_country'] ?? null;
                 $homeSwap->place_address = $data['place_address'] ?? null;
 
-                $homeSwap->preferred_location_latitude = $data['preferred_location_latitude'] ?? null;
-                $homeSwap->preferred_location_longitude = $data['preferred_location_longitude'] ?? null;
-                $homeSwap->preferred_location_city = $data['preferred_location_city'] ?? null;
-                $homeSwap->preferred_location_state = $data['preferred_location_state'] ?? null;
-                $homeSwap->preferred_location_country = $data['preferred_location_country'] ?? null;
-                $homeSwap->preferred_location_address = $data['preferred_location_address'] ?? null;
+                $homeSwap->preferred_holiday_location_latitude = $data['preferred_holiday_location_latitude'] ?? null;
+                $homeSwap->preferred_holiday_location_longitude = $data['preferred_holiday_location_longitude'] ?? null;
+                $homeSwap->preferred_holiday_location_city = $data['preferred_holiday_location_city'] ?? null;
+                $homeSwap->preferred_holiday_location_state = $data['preferred_holiday_location_state'] ?? null;
+                $homeSwap->preferred_holiday_location_country = $data['preferred_holiday_location_country'] ?? null;
+                $homeSwap->preferred_holiday_location_address = $data['preferred_holiday_location_address'] ?? null;
 
-                $homeSwap->date_available = $data['date_available'] ?? null;
+                $homeSwap->open_to_any_location = $data['open_to_any_location'] ?? false;
+
+                $homeSwap->start_date_to_travel = $data['start_date_to_travel'] ? Carbon::parse($request->start_date_to_travel)->format('Y-m-d') : null;
+                $homeSwap->end_date_to_travel = $data['end_date_to_travel'] ? Carbon::parse($request->end_date_to_travel)->format('Y-m-d') : null;
+
                 $homeSwap->swap_type = $data['swap_type'] ?? null;
 
                 $homeSwap->place_pictures = !empty($data['place_pictures']) ? json_encode($data['place_pictures']) : null;
@@ -210,8 +218,8 @@ class HomeSwapController extends Controller
                 $homeSwap->decribe_place_features = json_encode($data['decribe_place_features']);
             }
 
-            if (!empty($data['what_place_offer'])) {
-                $homeSwap->what_place_offer = json_encode($data['what_place_offer']);
+            if (!empty($data['what_place_offer_visitors'])) {
+                $homeSwap->what_place_offer_visitors = json_encode($data['what_place_offer_visitors']);
             }
 
             $homeSwap->bedrooms = $data['bedrooms'] ?? $homeSwap->bedrooms;
@@ -225,14 +233,17 @@ class HomeSwapController extends Controller
             $homeSwap->place_country = $data['place_country'] ?? $homeSwap->place_country;
             $homeSwap->place_address = $data['place_address'] ?? $homeSwap->place_address;
 
-            $homeSwap->preferred_location_latitude = $data['preferred_location_latitude'] ?? $homeSwap->preferred_location_latitude;
-            $homeSwap->preferred_location_longitude = $data['preferred_location_longitude'] ?? $homeSwap->preferred_location_longitude;
-            $homeSwap->preferred_location_city = $data['preferred_location_city'] ?? $homeSwap->preferred_location_city;
-            $homeSwap->preferred_location_state = $data['preferred_location_state'] ?? $homeSwap->preferred_location_state;
-            $homeSwap->preferred_location_country = $data['preferred_location_country'] ?? $homeSwap->preferred_location_country;
-            $homeSwap->preferred_location_address = $data['preferred_location_address'] ?? $homeSwap->preferred_location_address;
+            $homeSwap->preferred_holiday_location_latitude = $data['preferred_holiday_location_latitude'] ?? $homeSwap->preferred_holiday_location_latitude;
+            $homeSwap->preferred_holiday_location_longitude = $data['preferred_holiday_location_longitude'] ?? $homeSwap->preferred_holiday_location_longitude;
+            $homeSwap->preferred_holiday_location_city = $data['preferred_holiday_location_city'] ?? $homeSwap->preferred_holiday_location_city;
+            $homeSwap->preferred_holiday_location_state = $data['preferred_holiday_location_state'] ?? $homeSwap->preferred_holiday_location_state;
+            $homeSwap->preferred_holiday_location_country = $data['preferred_holiday_location_country'] ?? $homeSwap->preferred_holiday_location_country;
+            $homeSwap->preferred_holiday_location_address = $data['preferred_holiday_location_address'] ?? $homeSwap->preferred_holiday_location_address;
 
-            $homeSwap->date_available = $data['date_available'] ?? $homeSwap->date_available;
+            $homeSwap->open_to_any_location = $data['open_to_any_location'] ?? false;
+
+            $homeSwap->start_date_to_travel = $data['start_date_to_travel'] ? Carbon::parse($request->start_date_to_travel)->format('Y-m-d') : null;
+            $homeSwap->end_date_to_travel = $data['end_date_to_travel'] ? Carbon::parse($request->end_date_to_travel)->format('Y-m-d') : null;
             $homeSwap->swap_type = $data['swap_type'] ?? $homeSwap->swap_type;
 
             if (!empty($data['place_pictures'])) {

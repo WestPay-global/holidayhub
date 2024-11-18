@@ -38,4 +38,9 @@ class ListOffer extends Model
     {
         return $this->belongsTo(HomeSwap::class, 'list_id')->where('list_type','homeswap');
     }
+
+    public function nonswaplist()
+    {
+        return $this->belongsTo(NonSwap::class, 'list_id')->where('list_type','nonswap');
+    }
 }

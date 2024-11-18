@@ -14,7 +14,7 @@ class MessageController extends Controller
 {
 
 
-    public function chatHistory($task_offer_id, $selected_user_id)
+    public function chatHistory($list_offer_id, $selected_user_id)
     {
         // Validate the incoming request to ensure receiver_id is provided and exists
 
@@ -23,15 +23,15 @@ class MessageController extends Controller
             $authUserId = Auth::id();
 
             // Retrieve the messages exchanged between the authenticated user and the specified receiver
-            $messages = Message::where(function ($query) use ($authUserId, $task_offer_id, $selected_user_id) {
+            $messages = Message::where(function ($query) use ($authUserId, $list_offer_id, $selected_user_id) {
                 $query->where('sender_id', $authUserId)
                     ->where('receiver_id', $selected_user_id)
-                    ->where('task_offer_id', $task_offer_id);
+                    ->where('list_offer_id', $list_offer_id);
             })
-            ->orWhere(function ($query) use ($authUserId, $task_offer_id, $selected_user_id) {
+            ->orWhere(function ($query) use ($authUserId, $list_offer_id, $selected_user_id) {
                 $query->where('sender_id', $selected_user_id)
                     ->where('receiver_id', $authUserId)
-                    ->where('task_offer_id', $task_offer_id);
+                    ->where('list_offer_id', $list_offer_id);
             })
             ->orderBy('created_at', 'asc') // Order messages by creation date in ascending order
             ->get();
@@ -57,8 +57,9 @@ class MessageController extends Controller
             'sender_id' => 'required|exists:users,id',
             'receiver_id' => 'required|exists:users,id',
 
-            'task_id' => 'required|exists:tasks,id',
-            'task_offer_id' => 'required|exists:task_offers,id',
+            'list_type' => 'required',
+            'list_id' => $request->list_type == 'homeswap' ? 'required|exists:home_swaps,id' : 'required|exists:non_swaps,id',
+            'list_offer_id' => 'required|exists:list_offers,id',
 
             'message' => 'required|string',
         ]);
@@ -70,21 +71,14 @@ class MessageController extends Controller
                 'sender_id' => $request->sender_id,
                 'receiver_id' => $request->receiver_id,
 
-                'task_id' => $request->task_id,
-                'task_offer_id' => $request->task_offer_id,
+                'list_type' => $request->list_type,
+                'list_id' => $request->list_id,
+                'list_offer_id' => $request->list_offer_id,
                 'message' => $request->message,
             ]);
 
             // Retrieve recipient device token
             $token = $this->getRecipientDeviceToken($message->receiver_id);
-
-            //Using package Send FCM notification, tis wil return true
-            // $this->fcmService->sendNotification(
-            //     $token,
-            //     'New Message',
-            //     'You have received a new message',
-            //     ['message_id' => $message->id]
-            // );
 
             //using core firebase
             if ($token) {
@@ -98,8 +92,9 @@ class MessageController extends Controller
                             "sender_id" => (string) $message->sender_id,
                             "receiver_id" => (string) $message->receiver_id,
 
-                            'task_id' => (string) $message->task_id,
-                            'task_offer_id' => (string) $message->task_offer_id,
+                            'list_type' => (string) $message->list_type,
+                            'list_id' => (string) $message->list_id,
+                            'list_offer_id' => (string) $message->list_offer_id,
                         ],
                         'notification' => [
                             'title' => 'New Message',
@@ -167,8 +162,8 @@ class MessageController extends Controller
                     "sender_id" => '1',
                     "receiver_id" => '2',
 
-                    'task_id' => '1',
-                    'task_offer_id' => '2',
+                    'list_id' => '1',
+                    'list_offer_id' => '2',
                 ],
                 'notification' => [
                     'title' => 'New Message',
