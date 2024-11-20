@@ -6,7 +6,8 @@ use App\CentralLogics\Helpers;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('social-login', [AuthController::class, 'social-login']);
+    Route::post('social-login', [AuthController::class, 'socialLogin']);
+    Route::get('cross-platform-check?{ivData}/{mData}', [AuthController::class, 'crossPlatformCheck']);
     // Route::get('profile', [AuthController::class, 'profile']);
 
     ////forgot password
@@ -74,3 +75,10 @@ Route::group(['prefix' => 'chat'], function () {
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     Route::get('/history/{task_offer_id}/{selected_user_id}', [MessageController::class, 'chatHistory']);
 });
+
+Route::group(['middleware' => 'auth', 'prefix' => 'wallet'], function () {
+    Route::get('/balance', [WalletController::class, 'getBalance']);
+    Route::post('/earnings', [WalletController::class, 'addEarnings']);
+    Route::post('/withdraw', [WalletController::class, 'withdraw']);
+});
+

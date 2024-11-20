@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Models\HomeSwap;
 use App\Models\NonSwap;
 use App\Models\Message;
+use App\Models\ListOffer;
 
 class ListOfferController extends Controller
 {
@@ -70,6 +71,7 @@ class ListOfferController extends Controller
                 'sender_id' => $user->id,
                 'receiver_id' => $list->created_by,
 
+                'list_type' => $listType,
                 'list_id' => $list->id,
                 'list_offer_id' => $listOffer->id,
                 'message' => $request->initial_message,
@@ -92,25 +94,84 @@ class ListOfferController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function ownerPreApproveOffer($list_offer_id)
     {
-        //
+        $user = Auth::user();
+
+        $listOffer = ListOffer::findOrFail($list_offer_id);
+
+        //u cannot pre-approve wat isnt urs
+        if ($listOffer->owner_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => "Unauthorized process",
+            ]);
+        }
+        $listOffer->owner_pre_approve = true;
+        $listOffer->owner_pre_approve_at = now();
+
+        $listOffer->owner_cancel = false;
+        $listOffer->owner_cancel_at = null;
+        $listOffer->owner_cancel_reason = null;
+        $listOffer->status = 'upcoming';
+        $listOffer->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pre-approved Successfully',
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function ownerCancelOffer(Request $request, $list_offer_id)
     {
-        //
+        $user = Auth::user();
+
+        $listOffer = ListOffer::findOrFail($list_offer_id);
+
+        //u cannot pre-approve wat isnt urs
+        if ($listOffer->owner_id !== $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => "Unauthorized process",
+            ]);
+        }
+        $listOffer->owner_pre_approve = false;
+        $listOffer->owner_pre_approve_at = null;
+
+        $listOffer->owner_cancel = true;
+        $listOffer->owner_cancel_at = now();
+        $listOffer->owner_cancel_reason = $request->owner_cancel_reason ? $request->owner_cancel_reason : "no reason";
+        $listOffer->status = 'cancelled';
+        $listOffer->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cancelled Successfully',
+        ]);
     }
 
     /**
      * Display the specified resource.
+     * pending, upcoming, completed, cancelled
      */
-    public function show(string $id)
+    public function myListOffers($status, $list_type)
     {
-        //
+        $user = Auth::user();
+
+        if ($list_type=="homeswap") {
+            $listOffers = $status == 'all' ?
+            ListOffer::with(['seeker', 'homeswaplist'])->where('owner_id', $user->id)->where('list_type', 'homeswap')->get() :
+            ListOffer::with(['seeker', 'homeswaplist'])->where('owner_id', $user->id)->where('list_type', 'homeswap')->where('status',$status)->get();
+        } else {
+            $listOffers = $status == 'all' ?
+            ListOffer::with(['seeker', 'nonswaplist'])->where('owner_id', $user->id)->where('list_type', 'nonswap')->get() :
+            ListOffer::with(['seeker', 'nonswaplist'])->where('owner_id', $user->id)->where('list_type', 'nonswap')->where('status',$status)->get();
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $listOffers,
+        ]);
     }
 
     /**
