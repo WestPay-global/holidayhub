@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->longText('auto_login_token')->nullable();
             $table->rememberToken();
             $table->string('guest_points')->nullable();
             $table->string('profile_picture')->nullable();
@@ -33,6 +34,9 @@ return new class extends Migration
             $table->string('current_state')->nullable();
             $table->string('current_country')->nullable();
             $table->string('current_address')->nullable();
+
+            $table->boolean('has_homeswap')->default(false);
+            $table->boolean('has_nonswap')->default(false);
             $table->timestamps();
         });
     }

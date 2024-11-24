@@ -65,4 +65,31 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function getBgColor($status)
+    {
+
+        $allStatus = [
+            ['name'=>'approved', 'bgColor'=>'success'],
+            ['name'=>'pending', 'bgColor'=>'primary'],
+            ['name'=>'suspended', 'bgColor'=>'danger'],
+        ];
+
+        foreach ($allStatus as $statusItem) {
+            if ($statusItem['name'] === $status) {
+                return $statusItem['bgColor'];
+            }
+        }
+        return null; // Return null or a default value if the status is not found
+    }
+
+    public function homeSwaps()
+    {
+        return $this->hasMany(HomeSwap::class, 'created_by');
+    }
+
+    public function nonSwaps()
+    {
+        return $this->hasMany(NonSwap::class, 'created_by');
+    }
 }

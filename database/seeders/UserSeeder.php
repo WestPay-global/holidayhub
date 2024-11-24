@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Raphael Santos',
                 'email' => 'santosralph2022@gmail.com',
-                // 'is_phone_number_visible' => false,
+                'has_homeswap' => true,
+                'has_nonswap' => true,
                 'password' => Hash::make('password'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -28,7 +29,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Ugo Raphael',
                 'email' => 'ralphsunny114@gmail.com',
-                // 'is_phone_number_visible' => false,
+                'has_homeswap' => false,
+                'has_nonswap' => true,
                 'password' => Hash::make('password'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -36,7 +38,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Nick Dev',
                 'email' => 'nick@email.com',
-                // 'is_phone_number_visible' => false,
+                'has_homeswap' => false,
+                'has_nonswap' => false,
                 'password' => Hash::make('password'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -44,7 +47,8 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Dreymi',
                 'email' => 'dr3ymi@gmail.com',
-                // 'is_phone_number_visible' => false,
+                'has_homeswap' => false,
+                'has_nonswap' => false,
                 'password' => Hash::make('Foobarbaz1!'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

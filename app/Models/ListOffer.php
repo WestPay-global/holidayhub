@@ -29,6 +29,11 @@ class ListOffer extends Model
         return null; // Return null if one of the dates is missing
     }
 
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
     public function seeker()
     {
         return $this->belongsTo(User::class, 'seeker_id');
@@ -42,5 +47,22 @@ class ListOffer extends Model
     public function nonswaplist()
     {
         return $this->belongsTo(NonSwap::class, 'list_id')->where('list_type','nonswap');
+    }
+
+    public function getBgColor($status)
+    {
+        $allStatus = [
+            ['name'=>'pending', 'bgColor'=>'primary'],
+            ['name'=>'upcoming', 'bgColor'=>'info'],
+            ['name'=>'completed', 'bgColor'=>'success'],
+            ['name'=>'cancelled', 'bgColor'=>'dark'],
+        ];
+
+        foreach ($allStatus as $statusItem) {
+            if ($statusItem['name'] === $status) {
+                return $statusItem['bgColor'];
+            }
+        }
+        return null; // Return null or a default value if the status is not found
     }
 }

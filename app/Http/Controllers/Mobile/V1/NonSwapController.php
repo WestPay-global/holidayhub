@@ -73,7 +73,7 @@ class NonSwapController extends Controller
                 $nonSwap->created_by = $user->id;
                 $nonSwap->seeker_id = null;
 
-                $nonSwap->decribe_place_features = !empty($data['decribe_place_features']) ? json_encode($data['decribe_place_features']) : null;
+                $nonSwap->describe_place_features = !empty($data['describe_place_features']) ? json_encode($data['describe_place_features']) : null;
 
                 $nonSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
@@ -108,6 +108,8 @@ class NonSwapController extends Controller
                 $nonSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? null;
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
+
+                $nonSwap->has_nonswap = true;
 
                 $nonSwap->save();
 
@@ -117,7 +119,7 @@ class NonSwapController extends Controller
                 $nonSwap->created_by = $user->id;
                 $nonSwap->seeker_id = null;
 
-                $nonSwap->decribe_place_features = !empty($data['decribe_place_features']) ? json_encode($data['decribe_place_features']) : null;
+                $nonSwap->describe_place_features = !empty($data['describe_place_features']) ? json_encode($data['describe_place_features']) : null;
 
                 $nonSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
@@ -152,6 +154,8 @@ class NonSwapController extends Controller
                 $nonSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? null;
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
+
+                $nonSwap->has_nonswap = true;
 
                 $nonSwap->save();
 
@@ -190,8 +194,8 @@ class NonSwapController extends Controller
                 ]);
             }
 
-            if (!empty($data['decribe_place_features'])) {
-                $nonSwap->decribe_place_features = json_encode($data['decribe_place_features']);
+            if (!empty($data['describe_place_features'])) {
+                $nonSwap->describe_place_features = json_encode($data['describe_place_features']);
             }
 
             if (!empty($data['what_place_offer_visitors'])) {

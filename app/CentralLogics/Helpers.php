@@ -3,9 +3,55 @@
 namespace App\CentralLogics;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+use App\Models\User;
 
 class Helpers
 {
+
+    public static function generateJWT($user) {
+        $payload = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $user->password,
+            'timestamp' => now()->timestamp // Add a timestamp for expiration validation
+        ];
+
+        // Generate the JWT token
+        $jwt = JWT::encode($payload, env('LOGIN_SECRET'), 'HS256');
+
+        return $jwt;
+    }
+
+    public static function handleJWT($token) {
+        try {
+            // Decode the JWT token
+            $payload = JWT::decode($token, new Key(env('LOGIN_SECRET'), 'HS256'));
+
+            // Optional: Validate the timestamp
+            if (now()->timestamp - $payload->timestamp > 28000000) { // 8 mths expiration
+                return response('Token expired', 403);
+            }
+
+            // Find or create the user in Site B
+            $user = User::firstOrCreate(
+                ['name' => $payload->name],
+                ['email' => $payload->email],
+                ['password' => $payload->password],
+
+            );
+
+            // Log in the user
+            Auth::login($user);
+            return $user;
+        } catch (\Exception $e) {
+            return response('Invalid token', 403);
+        }
+    }
+
 
     /**
      * Encrypt data

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,28 @@ Route::get('login', function () {
     ], 401);
 })->name('login');
 
-Route::get('/', function () {
-    return view('welcome');
+////admin/////////////
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/', [DashboardController::class, 'adminDashboard'])->name('adminDashboard');
 });
+
+Route::group(['prefix' => 'users'], function () {
+    Route::get('/{list_type?}', [DashboardController::class, 'allUser'])->name('allUser');
+    Route::get('/single/{user_id}', [DashboardController::class, 'singleUser'])->name('singleUser');
+});
+
+Route::group(['prefix' => 'homeswaps'], function () {
+    Route::get('/{status?}', [DashboardController::class, 'allHomeSwap'])->name('allHomeSwap');
+    Route::get('/single/{list_id}', [DashboardController::class, 'singleHomeSwap'])->name('singleHomeSwap');
+});
+
+Route::group(['prefix' => 'nonswaps'], function () {
+    Route::get('/{status?}', [DashboardController::class, 'allNonSwap'])->name('allNonSwap');
+    Route::get('/single/{list_id}', [DashboardController::class, 'singleNonSwap'])->name('singleNonSwap');
+});
+
+Route::group(['prefix' => 'offers'], function () {
+    Route::get('/{status?}', [DashboardController::class, 'allOffer'])->name('allOffer');
+    Route::get('/single/{list_offer_id}', [DashboardController::class, 'singleOffer'])->name('singleOffer');
+});
+

@@ -73,7 +73,7 @@ class HomeSwapController extends Controller
                 $homeSwap->created_by = $user->id;
                 $homeSwap->seeker_id = null;
 
-                $homeSwap->decribe_place_features = !empty($data['decribe_place_features']) ? json_encode($data['decribe_place_features']) : null;
+                $homeSwap->describe_place_features = !empty($data['describe_place_features']) ? json_encode($data['describe_place_features']) : null;
 
                 $homeSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
@@ -120,6 +120,8 @@ class HomeSwapController extends Controller
                 $homeSwap->additional_information = $data['additional_information'] ?? null;
 
                 $homeSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
+
+                $homeSwap->has_homeswap = true;
 
                 $homeSwap->save();
 
@@ -129,7 +131,7 @@ class HomeSwapController extends Controller
                 $homeSwap->created_by = $user->id;
                 $homeSwap->seeker_id = null;
 
-                $homeSwap->decribe_place_features = !empty($data['decribe_place_features']) ? json_encode($data['decribe_place_features']) : null;
+                $homeSwap->describe_place_features = !empty($data['describe_place_features']) ? json_encode($data['describe_place_features']) : null;
 
                 $homeSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
@@ -176,6 +178,8 @@ class HomeSwapController extends Controller
                 $homeSwap->additional_information = $data['additional_information'] ?? null;
 
                 $homeSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
+
+                $homeSwap->has_homeswap = true;
 
                 $homeSwap->save();
 
@@ -195,10 +199,6 @@ class HomeSwapController extends Controller
         }
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $data = $request->all();
@@ -214,8 +214,8 @@ class HomeSwapController extends Controller
                 ]);
             }
 
-            if (!empty($data['decribe_place_features'])) {
-                $homeSwap->decribe_place_features = json_encode($data['decribe_place_features']);
+            if (!empty($data['describe_place_features'])) {
+                $homeSwap->describe_place_features = json_encode($data['describe_place_features']);
             }
 
             if (!empty($data['what_place_offer_visitors'])) {

@@ -20,7 +20,7 @@ class HomeSwapSeeder extends Seeder
                 'created_by' => 1,
                 'seeker_id' => null,
 
-                'decribe_place_features' => json_encode(['House', 'Apartment', 'Barn', 'Bed & Breakfast', 'Boat']),
+                'describe_place_features' => json_encode(['House', 'Apartment', 'Barn', 'Bed & Breakfast', 'Boat']),
 
                 'what_place_offer_visitors' => json_encode(['Wifi', 'Television', 'Washer', 'Free Parking on Premises']),
 
@@ -80,7 +80,7 @@ class HomeSwapSeeder extends Seeder
                 'created_by' => 1,
                 'seeker_id' => null,
 
-                'decribe_place_features' => json_encode(['House', 'Apartment', 'Barn', 'Bed & Breakfast', 'Boat']),
+                'describe_place_features' => json_encode(['House', 'Apartment', 'Barn', 'Bed & Breakfast', 'Boat']),
 
                 'what_place_offer_visitors' => json_encode(['Wifi', 'Television', 'Washer', 'Free Parking on Premises']),
 

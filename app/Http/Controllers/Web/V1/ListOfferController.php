@@ -33,7 +33,8 @@ class ListOfferController extends Controller
                 ]);
             }
 
-            $offerExists = ListOffer::where(['list_id' => $list->id, 'seeker_id' => $user->id])->first();
+            $offerExists = $listType == 'homeswap' ? ListOffer::where(['list_type' => 'homeswap', 'list_id' => $list->id, 'seeker_id' => $user->id])->first() :
+            ListOffer::where(['list_type' => 'nonswap', 'list_id' => $list->id, 'seeker_id' => $user->id])->first();
 
             if ($offerExists) {
                 return response()->json([

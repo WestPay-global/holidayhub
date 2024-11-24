@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('list_type')->default('homeswap');
 
             //choose the ones that accurately describe ur place
-            $table->json('decribe_place_features')->nullable();
+            $table->json('describe_place_features')->nullable();
 
             //share with visitors what your place has to offer
             $table->json('what_place_offer_visitors')->nullable();
@@ -75,7 +75,7 @@ return new class extends Migration
             $table->json('set_rules')->nullable();
 
             $table->string('previous_status')->default('draft'); //used in deactivation/activation actions
-            $table->string('status')->default('draft');
+            $table->string('status')->default('draft'); //completed, suspended
 
             $table->timestamps();
         });
