@@ -16,7 +16,7 @@ class HomeSwapController extends Controller
     {
         $perPage = 30; // Adjust perPage value as needed
 
-        $homeSwaps = HomeSwap::orderBy('id', 'desc')->paginate($perPage);
+        $homeSwaps = HomeSwap::with('createdBy')->orderBy('id', 'desc')->paginate($perPage);
         return response()->json([
             'success' => true,
             'data' => $homeSwaps
@@ -31,7 +31,7 @@ class HomeSwapController extends Controller
         try {
             $user = Auth::user();
 
-            $homeSwap = HomeSwap::findOrFail($id);
+            $homeSwap = HomeSwap::with('createdBy')->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -52,7 +52,7 @@ class HomeSwapController extends Controller
         $user = Auth::user();
         $perPage = 30; // Adjust perPage value as needed
 
-        $homeSwaps = HomeSwap::where('created_by', $user->id)->orderBy('id', 'desc')->paginate($perPage);
+        $homeSwaps = HomeSwap::with('createdBy')->where('created_by', $user->id)->orderBy('id', 'desc')->paginate($perPage);
         return response()->json([
             'success' => true,
             'data' => $homeSwaps
