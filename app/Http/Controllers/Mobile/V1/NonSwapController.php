@@ -16,7 +16,7 @@ class NonSwapController extends Controller
     {
         $perPage = 30; // Adjust perPage value as needed
 
-        $nonSwaps = NonSwap::orderBy('id', 'desc')->paginate($perPage);
+        $nonSwaps = NonSwap::with('createdBy')->orderBy('id', 'desc')->paginate($perPage);
         return response()->json([
             'success' => true,
             'data' => $nonSwaps
@@ -31,7 +31,7 @@ class NonSwapController extends Controller
         try {
             $user = Auth::user();
 
-            $nonSwap = NonSwap::findOrFail($id);
+            $nonSwap = NonSwap::with('createdBy')->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -52,7 +52,7 @@ class NonSwapController extends Controller
         $user = Auth::user();
         $perPage = 30; // Adjust perPage value as needed
 
-        $nonSwaps = NonSwap::where('created_by', $user->id)->orderBy('id', 'desc')->paginate($perPage);
+        $nonSwaps = NonSwap::with('createdBy')->where('created_by', $user->id)->orderBy('id', 'desc')->paginate($perPage);
         return response()->json([
             'success' => true,
             'data' => $nonSwaps
