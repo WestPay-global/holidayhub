@@ -20,9 +20,9 @@ return new class extends Migration
             $table->longText('message');
             $table->enum('message_type', ['text', 'attachment'])->default('text');
 
-            $table->string('list_type');
-            $table->unsignedBigInteger('list_offer_id');
-            $table->unsignedBigInteger('list_id');
+            $table->string('list_type')->nullable();
+            $table->unsignedBigInteger('list_offer_id')->nullable();
+            $table->unsignedBigInteger('list_id')->nullable();
 
             $table->boolean('is_received')->default(0);
 

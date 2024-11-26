@@ -59,7 +59,7 @@ class MessageController extends Controller
 
             'list_type' => 'required',
             'list_id' => $request->list_type == 'homeswap' ? 'required|exists:home_swaps,id' : 'required|exists:non_swaps,id',
-            'list_offer_id' => 'required|exists:list_offers,id',
+            'list_offer_id' => 'nullable|exists:list_offers,id',
 
             'message' => 'required|string',
         ]);
@@ -73,7 +73,7 @@ class MessageController extends Controller
 
                 'list_type' => $request->list_type,
                 'list_id' => $request->list_id,
-                'list_offer_id' => $request->list_offer_id,
+                'list_offer_id' => $request->list_offer_id ? $request->list_offer_id : null,
                 'message' => $request->message,
             ]);
 
