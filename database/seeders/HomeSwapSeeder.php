@@ -24,6 +24,7 @@ class HomeSwapSeeder extends Seeder
 
                 'what_place_offer_visitors' => json_encode(['Wifi', 'Television', 'Washer', 'Free Parking on Premises']),
 
+                'guests' => 3,
                 'bedrooms' => 3,
                 'beds' => 3,
                 'bathrooms' => 3,
@@ -84,6 +85,7 @@ class HomeSwapSeeder extends Seeder
 
                 'what_place_offer_visitors' => json_encode(['Wifi', 'Television', 'Washer', 'Free Parking on Premises']),
 
+                'guests' => 3,
                 'bedrooms' => 3,
                 'beds' => 3,
                 'bathrooms' => 3,
