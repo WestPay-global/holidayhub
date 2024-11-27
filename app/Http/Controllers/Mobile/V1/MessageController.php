@@ -53,7 +53,7 @@ class MessageController extends Controller
             $authUserId = Auth::id();
 
             // Retrieve the messages exchanged between the authenticated user and the specified receiver
-            $messages = Message::where(function ($query) use ($authUserId, $list_offer_id, $selected_user_id) {
+            $messages = $list_offer_id ? Message::where(function ($query) use ($authUserId, $list_offer_id, $selected_user_id) {
                 $query->where('sender_id', $authUserId)
                     ->where('receiver_id', $selected_user_id)
                     ->where('list_offer_id', $list_offer_id);
@@ -62,6 +62,16 @@ class MessageController extends Controller
                 $query->where('sender_id', $selected_user_id)
                     ->where('receiver_id', $authUserId)
                     ->where('list_offer_id', $list_offer_id);
+            })
+            ->orderBy('created_at', 'asc') // Order messages by creation date in ascending order
+            ->get() :
+            Message::where(function ($query) use ($authUserId, $selected_user_id) {
+                $query->where('sender_id', $authUserId)
+                    ->where('receiver_id', $selected_user_id);
+            })
+            ->orWhere(function ($query) use ($authUserId, $selected_user_id) {
+                $query->where('sender_id', $selected_user_id)
+                    ->where('receiver_id', $authUserId);
             })
             ->orderBy('created_at', 'asc') // Order messages by creation date in ascending order
             ->get();
