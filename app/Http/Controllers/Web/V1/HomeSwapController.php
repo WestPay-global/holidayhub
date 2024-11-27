@@ -121,7 +121,7 @@ class HomeSwapController extends Controller
 
                 $homeSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
 
-                $homeSwap->has_homeswap = true;
+                // $homeSwap->has_homeswap = true;
 
                 $homeSwap->save();
 
@@ -179,7 +179,7 @@ class HomeSwapController extends Controller
 
                 $homeSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
 
-                $homeSwap->has_homeswap = true;
+                // $homeSwap->has_homeswap = true;
 
                 $homeSwap->save();
 

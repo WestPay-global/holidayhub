@@ -160,12 +160,12 @@ class ListOfferController extends Controller
 
         if ($list_type=="homeswap") {
             $listOffers = $status == 'all' ?
-            ListOffer::with(['seeker', 'homeswaplist'])->where('owner_id', $user->id)->where('list_type', 'homeswap')->get() :
-            ListOffer::with(['seeker', 'homeswaplist'])->where('owner_id', $user->id)->where('list_type', 'homeswap')->where('status',$status)->get();
+            ListOffer::with(['seeker', 'homeswaplist'])->where('list_type', 'homeswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get() :
+            ListOffer::with(['seeker', 'homeswaplist'])->where('list_type', 'homeswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get();
         } else {
             $listOffers = $status == 'all' ?
-            ListOffer::with(['seeker', 'nonswaplist'])->where('owner_id', $user->id)->where('list_type', 'nonswap')->get() :
-            ListOffer::with(['seeker', 'nonswaplist'])->where('owner_id', $user->id)->where('list_type', 'nonswap')->where('status',$status)->get();
+            ListOffer::with(['seeker', 'nonswaplist'])->where('list_type', 'nonswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get() :
+            ListOffer::with(['seeker', 'nonswaplist'])->where('list_type', 'nonswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get();
         }
 
         return response()->json([

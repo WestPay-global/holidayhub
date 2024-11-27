@@ -109,7 +109,7 @@ class NonSwapController extends Controller
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
 
-                $nonSwap->has_nonswap = true;
+                // $nonSwap->has_nonswap = true;
 
                 $nonSwap->save();
 
@@ -155,7 +155,7 @@ class NonSwapController extends Controller
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
 
-                $nonSwap->has_nonswap = true;
+                // $nonSwap->has_nonswap = true;
 
                 $nonSwap->save();
 
