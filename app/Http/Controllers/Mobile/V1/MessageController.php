@@ -44,7 +44,7 @@ class MessageController extends Controller
 
     }
 
-    public function chatHistory($list_offer_id, $selected_user_id)
+    public function chatHistory($selected_user_id, $list_offer_id=null)
     {
         // Validate the incoming request to ensure receiver_id is provided and exists
 

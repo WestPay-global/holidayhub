@@ -73,7 +73,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'fcm'], function () {
 
 Route::group(['prefix' => 'chat'], function () {
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
-    Route::get('/history/{task_offer_id?}/{selected_user_id}', [MessageController::class, 'chatHistory']);
+    Route::get('/history/{selected_user_id}/{task_offer_id?}', [MessageController::class, 'chatHistory']);
     Route::get('/contacts', [MessageController::class, 'chatContacts']);
 });
 
