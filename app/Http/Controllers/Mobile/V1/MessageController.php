@@ -44,51 +44,50 @@ class MessageController extends Controller
 
     }
 
-    public function chatHistory($selected_user_id, $list_offer_id=null)
+    public function chatHistory($selected_user_id, $list_offer_id = null)
     {
-        // Validate the incoming request to ensure receiver_id is provided and exists
-
         try {
             // Get the authenticated user's ID
             $authUserId = Auth::id();
 
-            // Retrieve the messages exchanged between the authenticated user and the specified receiver
-            $messages = $list_offer_id ? Message::where(function ($query) use ($authUserId, $list_offer_id, $selected_user_id) {
+            // Build the query for retrieving messages
+            $messagesQuery = Message::where(function ($query) use ($authUserId, $selected_user_id) {
                 $query->where('sender_id', $authUserId)
-                    ->where('receiver_id', $selected_user_id)
-                    ->where('list_offer_id', $list_offer_id);
-            })
-            ->orWhere(function ($query) use ($authUserId, $list_offer_id, $selected_user_id) {
-                $query->where('sender_id', $selected_user_id)
-                    ->where('receiver_id', $authUserId)
-                    ->where('list_offer_id', $list_offer_id);
-            })
-            ->orderBy('created_at', 'asc') // Order messages by creation date in ascending order
-            ->get() :
-            Message::where(function ($query) use ($authUserId, $selected_user_id) {
-                $query->where('sender_id', $authUserId)
-                    ->where('receiver_id', $selected_user_id);
+                      ->where('receiver_id', $selected_user_id);
             })
             ->orWhere(function ($query) use ($authUserId, $selected_user_id) {
                 $query->where('sender_id', $selected_user_id)
-                    ->where('receiver_id', $authUserId);
-            })
-            ->orderBy('created_at', 'asc') // Order messages by creation date in ascending order
-            ->get();
+                      ->where('receiver_id', $authUserId);
+            });
 
+            // Add list_offer_id condition if provided
+            if ($list_offer_id) {
+                $messagesQuery->where('list_offer_id', $list_offer_id);
+            }
+
+            // Fetch messages ordered by creation date
+            $messages = $messagesQuery->orderBy('created_at', 'asc')->get();
+
+            // Update 'is_received' for messages received by the authenticated user
             $receivedMessageIds = $messages->where('receiver_id', $authUserId)->pluck('id');
-
             if ($receivedMessageIds->isNotEmpty()) {
                 Message::whereIn('id', $receivedMessageIds)->update(['is_received' => 1]);
             }
 
             // Return the messages as a JSON response
-            return response()->json(['success'=>true, 'data'=>$messages]);
-        } catch (\Exception $e) {
-            //throw $th;
-            return response()->json(['success'=>false, 'message'=>'Something went wrong', 'error'=>$e->getMessage()]);
-        }
+            return response()->json([
+                'success' => true,
+                'data' => $messages,
+            ], 200);
 
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function sendMessage(Request $request)
