@@ -25,6 +25,7 @@ return new class extends Migration
             $table->json('what_place_offer_visitors')->nullable();
 
             //describe a few essential details about your place
+            $table->string('guests')->nullable();
             $table->string('bedrooms')->nullable();
             $table->string('beds')->nullable();
             $table->string('bathrooms')->nullable();

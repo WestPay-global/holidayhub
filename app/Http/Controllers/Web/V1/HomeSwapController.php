@@ -77,6 +77,7 @@ class HomeSwapController extends Controller
 
                 $homeSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
+                $homeSwap->guests = $data['guests'] ?? null;
                 $homeSwap->bedrooms = $data['bedrooms'] ?? null;
                 $homeSwap->beds = $data['beds'] ?? null;
                 $homeSwap->bathrooms = $data['bathrooms'] ?? null;
@@ -135,6 +136,7 @@ class HomeSwapController extends Controller
 
                 $homeSwap->what_place_offer_visitors = !empty($data['what_place_offer_visitors']) ? json_encode($data['what_place_offer_visitors']) : null;
 
+                $homeSwap->guests = $data['guests'] ?? null;
                 $homeSwap->bedrooms = $data['bedrooms'] ?? null;
                 $homeSwap->beds = $data['beds'] ?? null;
                 $homeSwap->bathrooms = $data['bathrooms'] ?? null;
@@ -222,6 +224,7 @@ class HomeSwapController extends Controller
                 $homeSwap->what_place_offer_visitors = json_encode($data['what_place_offer_visitors']);
             }
 
+            $homeSwap->guests = $data['guests'] ?? $homeSwap->guests;
             $homeSwap->bedrooms = $data['bedrooms'] ?? $homeSwap->bedrooms;
             $homeSwap->beds = $data['beds'] ?? $homeSwap->beds;
             $homeSwap->bathrooms = $data['bathrooms'] ?? $homeSwap->bathrooms;
