@@ -50,8 +50,8 @@ class ListOfferController extends Controller
             $listOffer->seeker_id = $user->id;
             $listOffer->list_id = $list->id;
             $listOffer->list_type = $listType;
-            $listOffer->check_in = $request->check_in;
-            $listOffer->check_out = $request->check_out;
+            // $listOffer->check_in = $request->check_in;
+            // $listOffer->check_out = $request->check_out;
 
             // Normalize date inputs to Y-m-d using Carbon
             $listOffer->check_in = $request->check_in ? Carbon::parse($request->check_in)->format('Y-m-d') : null;
@@ -81,6 +81,62 @@ class ListOfferController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Offer Made Successfully',
+                'data' => $listOffer
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function updateOffer(Request $request, $list_offer_id)
+    {
+        try {
+            $user = Auth::user();
+
+            $listOffer = ListOffer::where(['id'=>$list_offer_id, 'seeker_id'=>$user->id])->first();
+
+            //u can only edit ur own offer
+            if (!$listOffer) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Unauthorized process",
+                ]);
+            }
+
+            $data = $request->all();
+
+            // Normalize date inputs to Y-m-d using Carbon
+            $listOffer->check_in = $request->check_in ? Carbon::parse($request->check_in)->format('Y-m-d') : $listOffer->check_in;
+            $listOffer->check_out = $request->check_out ? Carbon::parse($request->check_out)->format('Y-m-d') : $listOffer->check_out;
+
+            $listOffer->exchange_type = $request->exchange_type ? $request->exchange_type : $listOffer->exchange_type;
+
+            $listOffer->no_of_adults = (int) $request->no_of_adults > 0 ? (int) $request->no_of_adults : $listOffer->no_of_adults;
+            $listOffer->no_of_children = (int) $request->no_of_children > 0 ? (int) $request->no_of_children : $listOffer->no_of_children;
+            $listOffer->no_of_infants = (int) $request->no_of_infants > 0 ? $request->no_of_infants : $listOffer->no_of_infants;
+
+            $listOffer->initial_message = $request->initial_message ? $request->initial_message : $listOffer->initial_message;
+
+            $listOffer->save();
+
+            $message = Message::create([
+                'date_time' => now(),
+                'sender_id' => $user->id,
+                'receiver_id' => $listOffer->owner_id,
+
+                'list_type' => $listOffer->list_type,
+                'list_id' => $listOffer->id,
+                'list_offer_id' => $listOffer->id,
+                'message' => $request->initial_message,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Offer Updated Successfully',
                 'data' => $listOffer
             ]);
 
@@ -161,12 +217,12 @@ class ListOfferController extends Controller
 
         if ($list_type=="homeswap") {
             $listOffers = $status == 'all' ?
-            ListOffer::with(['seeker', 'homeswaplist'])->where('list_type', 'homeswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get() :
-            ListOffer::with(['seeker', 'homeswaplist'])->where('list_type', 'homeswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get();
+            ListOffer::with(['seeker', 'owner', 'homeswaplist'])->where('list_type', 'homeswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get() :
+            ListOffer::with(['seeker', 'owner', 'homeswaplist'])->where('list_type', 'homeswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get();
         } else {
             $listOffers = $status == 'all' ?
-            ListOffer::with(['seeker', 'nonswaplist'])->where('list_type', 'nonswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get() :
-            ListOffer::with(['seeker', 'nonswaplist'])->where('list_type', 'nonswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get();
+            ListOffer::with(['seeker', 'owner', 'nonswaplist'])->where('list_type', 'nonswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get() :
+            ListOffer::with(['seeker', 'owner', 'nonswaplist'])->where('list_type', 'nonswap')->where('owner_id', $user->id)->orWhere('seeker_id', $user->id)->get();
         }
 
         return response()->json([

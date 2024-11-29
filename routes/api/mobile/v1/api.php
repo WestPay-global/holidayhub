@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'wishlist'], function () {
 Route::group(['middleware' => 'auth', 'prefix' => 'list-offer'], function () {
     Route::get('my-offers/{status}/{list_type}', [ListOfferController::class, 'myListOffers']);
     Route::post('offer-an-exchange/{list_id}', [ListOfferController::class, 'offerAnExchange']);
+    Route::post('update-an-offer/{list_offer_id}', [ListOfferController::class, 'updateOffer']);
     Route::get('owner-pre-approve/{list_offer_id}', [ListOfferController::class, 'ownerPreApproveOffer']);
     Route::post('owner-cancel/{list_offer_id}', [ListOfferController::class, 'ownerCancelOffer']);
 });
@@ -71,7 +72,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'fcm'], function () {
     Route::post('/store-token', [FCMTokenController::class, 'store']);
 });
 
-Route::group(['prefix' => 'chat'], function () {
+Route::group(['middleware' => 'auth', 'prefix' => 'chat'], function () {
     Route::post('/send-message', [MessageController::class, 'sendMessage']);
     Route::get('/history/{selected_user_id}/{task_offer_id?}', [MessageController::class, 'chatHistory']);
     Route::get('/contacts', [MessageController::class, 'chatContacts']);
