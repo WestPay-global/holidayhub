@@ -16,7 +16,7 @@ class NonSwapController extends Controller
     {
         $perPage = 30; // Adjust perPage value as needed
 
-        $nonSwaps = NonSwap::with('createdBy')->orderBy('id', 'desc')->paginate($perPage);
+        $nonSwaps = NonSwap::with('creator')->orderBy('id', 'desc')->paginate($perPage);
         return response()->json([
             'success' => true,
             'data' => $nonSwaps
@@ -109,8 +109,6 @@ class NonSwapController extends Controller
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
 
-                $nonSwap->has_nonswap = true;
-
                 $nonSwap->save();
 
             } else {
@@ -154,8 +152,6 @@ class NonSwapController extends Controller
                 $nonSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? null;
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
-
-                $nonSwap->has_nonswap = true;
 
                 $nonSwap->save();
 

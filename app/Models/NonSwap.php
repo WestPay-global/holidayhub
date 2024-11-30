@@ -15,6 +15,11 @@ class NonSwap extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by')->select('id', 'name', 'profile_picture');
+    }
+
     public function seeker()
     {
         return $this->belongsTo(User::class, 'seeker_id');

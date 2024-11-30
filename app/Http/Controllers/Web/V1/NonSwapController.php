@@ -109,8 +109,6 @@ class NonSwapController extends Controller
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
 
-                // $nonSwap->has_nonswap = true;
-
                 $nonSwap->save();
 
             } else {
@@ -155,8 +153,6 @@ class NonSwapController extends Controller
 
                 $nonSwap->set_rules = !empty($data['set_rules']) ? json_encode($data['set_rules']) : null;
 
-                // $nonSwap->has_nonswap = true;
-
                 $nonSwap->save();
 
             }
@@ -175,10 +171,6 @@ class NonSwapController extends Controller
         }
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $data = $request->all();
@@ -335,9 +327,6 @@ class NonSwapController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function deleteNonSwap($id)
     {
         $user = Auth::user();
