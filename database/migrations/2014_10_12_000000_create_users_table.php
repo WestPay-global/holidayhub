@@ -37,6 +37,8 @@ return new class extends Migration
 
             $table->boolean('has_homeswap')->default(false);
             $table->boolean('has_nonswap')->default(false);
+
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

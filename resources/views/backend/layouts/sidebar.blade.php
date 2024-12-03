@@ -4,16 +4,16 @@
     <div class="logo-box">
         <!-- Brand Logo Light -->
         <a href="{{route('adminDashboard')}}" class="logo-light">
-            {{-- <img src="{{asset('/assets/images/logo-light.png')}}" alt="logo" class="logo-lg">
-            <img src="assets/images/logo-sm.png" alt="small logo" class="logo-sm"> --}}
-            <h3>HOLIDAY HUB</h3>
+            <img src="{{asset('/assets/backend/images/roomzhub-logo.png')}}" alt="logo" class="logo-lg">
+            <img src="{{asset('/assets/backend/images/roomzhub-logo.png')}}" alt="small logo" class="logo-sm">
+            <h4>Holiday Hub</h4>
         </a>
 
         <!-- Brand Logo Dark -->
         <a href="{{route('adminDashboard')}}" class="logo-dark">
-            {{-- <img src="{{asset('/assets/images/logo-dark.png')}}" alt="dark logo" class="logo-lg">
-            <img src="assets/images/logo-sm.png" alt="small logo" class="logo-sm"> --}}
-            <h3>HOLIDAY HUB</h3>
+            <img src="{{asset('/assets/backend/images/roomzhub-logo.png')}}" alt="logo" class="logo-lg">
+            <img src="{{asset('/assets/backend/images/roomzhub-logo.png')}}" alt="small logo" class="logo-sm">
+            <h4>Holiday Hub</h4>
         </a>
     </div>
 
@@ -24,7 +24,7 @@
         <div class="user-box text-center">
             <img src="{{asset('/assets/backend/images/users/user-1.jpg')}}" alt="user-img" title="Mat Helme" class="rounded-circle avatar-md">
             <div class="dropdown">
-                <a href="javascript: void(0);" class="dropdown-toggle h5 mb-1 d-block" data-bs-toggle="dropdown">Geneva Kennedy</a>
+                <a href="javascript: void(0);" class="dropdown-toggle h5 mb-1 d-block" data-bs-toggle="dropdown">{{Auth::guard('web')->user()->name}}</a>
                 <div class="dropdown-menu user-pro-dropdown">
 
                     <!-- item-->

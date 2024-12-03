@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+use Exception;
+
 use App\Models\User;
 use App\Models\HomeSwap;
 use App\Models\NonSwap;
@@ -13,9 +18,53 @@ use App\Models\ListOffer;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function login()
+    {
+        return view('backend.auth.login');
+    }
+
+    public function loginPost(Request $request)
+    {
+        $rules = array(
+            'email' => 'required|string|email|exists:users,email',
+            'password' => 'required|string',
+        );
+        $messages = [
+            'email.required' => '* Your Email is required',
+            'email.string' => '* Invalid Characters',
+            'email.email' => '* Must be of Email format with \'@\' symbol',
+            'email.exists' => '* Invalid Credentials',
+
+            'password.required'   => 'This field is required',
+            'password.string'   => 'Email does not exist',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        } else {
+            $user = User::where('email',$request->email)->first();
+            if($user->status !== 'superadmin'){
+                return back()->with('error', 'Unauthorised Process');
+            }
+
+            $credentials = $request->only('email', 'password');
+            $check = Auth::guard('web')->attempt($credentials);
+            if (!$check) {
+                return back()->with('error', 'Invalid email or password, please check your credentials and try again');
+            }
+            $user = Auth::getProvider()->retrieveByCredentials($credentials); //full user details
+
+            // if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            //     return redirect()->intended('/admin');
+            // }
+
+            // $user->save();
+            Auth::guard('web')->login($user);
+
+            return redirect()->route('adminDashboard');
+        }
+    }
     public function adminDashboard()
     {
         $users = User::count();
