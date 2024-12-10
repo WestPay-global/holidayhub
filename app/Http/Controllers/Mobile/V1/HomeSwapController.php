@@ -396,13 +396,13 @@ class HomeSwapController extends Controller
 
             // Handle distance filter (location)
             if ($request->query('location') === "true") {
-                $subhurb_latitude = $request->subhurb_latitude;
-                $subhurb_longitude = $request->subhurb_longitude;
+                $location_latitude = $request->location_latitude;
+                $location_longitude = $request->location_longitude;
 
-                if ($subhurb_latitude && $subhurb_longitude) {
+                if ($location_latitude && $location_longitude) {
                     // Filter based on latitude and longitude bounding box
-                    $query->whereBetween('place_latitude', [$subhurb_latitude - 0.5, $subhurb_latitude + 0.5])
-                        ->whereBetween('place_longitude', [$subhurb_longitude - 0.5, $subhurb_longitude + 0.5]);
+                    $query->whereBetween('place_latitude', [$location_latitude - 0.5, $location_latitude + 0.5])
+                        ->whereBetween('place_longitude', [$location_longitude - 0.5, $location_longitude + 0.5]);
                 }
             }
 
