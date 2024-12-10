@@ -52,8 +52,8 @@ class NonSwapSeeder extends Seeder
                 'cleaning_fee' => 10.00,
                 'pet_fee' => 5.00,
 
-                'available_window_start_date' => '2024-12-20',
-                'available_window_end_date' => '2024-12-23',
+                'available_window_start_date' => Carbon::parse('2024-12-20')->format('Y-m-d'),
+                'available_window_end_date' => Carbon::parse('2024-12-23')->format('Y-m-d'),
                 'minimum_stay_duration' => '2',
                 'maximum_stay_duration' => '3',
 
@@ -101,8 +101,8 @@ class NonSwapSeeder extends Seeder
                 'cleaning_fee' => 10.00,
                 'pet_fee' => 5.00,
 
-                'available_window_start_date' => '2024-12-20',
-                'available_window_end_date' => '2024-12-23',
+                'available_window_start_date' => Carbon::parse('2024-12-20')->format('Y-m-d'),
+                'available_window_end_date' => Carbon::parse('2024-12-23')->format('Y-m-d'),
                 'minimum_stay_duration' => '2',
                 'maximum_stay_duration' => '3',
 

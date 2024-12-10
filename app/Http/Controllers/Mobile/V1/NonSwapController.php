@@ -102,8 +102,8 @@ class NonSwapController extends Controller
                 $nonSwap->cleaning_fee = (float) $data['cleaning_fee'] ?? null;
                 $nonSwap->pet_fee = (float) $data['pet_fee'] ?? null;
 
-                $nonSwap->available_window_start_date = $data['available_window_start_date'] ?? null;
-                $nonSwap->available_window_end_date = $data['available_window_end_date'] ?? null;
+                $nonSwap->available_window_start_date = $data['available_window_start_date'] ? Carbon::parse($data['available_window_start_date'])->format('Y-m-d') : null;
+                $nonSwap->available_window_end_date = $data['available_window_end_date'] ? Carbon::parse($data['available_window_end_date'])->format('Y-m-d') : null;
                 $nonSwap->minimum_stay_duration = $data['minimum_stay_duration'] ?? null;
                 $nonSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? null;
 
@@ -146,8 +146,8 @@ class NonSwapController extends Controller
                 $nonSwap->cleaning_fee = (float) $data['cleaning_fee'] ?? null;
                 $nonSwap->pet_fee = (float) $data['pet_fee'] ?? null;
 
-                $nonSwap->available_window_start_date = $data['available_window_start_date'] ?? null;
-                $nonSwap->available_window_end_date = $data['available_window_end_date'] ?? null;
+                $nonSwap->available_window_start_date = $data['available_window_start_date'] ? Carbon::parse($data['available_window_start_date'])->format('Y-m-d') : null;
+                $nonSwap->available_window_end_date = $data['available_window_end_date'] ? Carbon::parse($data['available_window_end_date'])->format('Y-m-d') : null;
                 $nonSwap->minimum_stay_duration = $data['minimum_stay_duration'] ?? null;
                 $nonSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? null;
 
@@ -229,8 +229,8 @@ class NonSwapController extends Controller
             $nonSwap->cleaning_fee = (float) $data['cleaning_fee'] ?? $nonSwap->cleaning_fee;
             $nonSwap->pet_fee = (float) $data['pet_fee'] ?? $nonSwap->pet_fee;
 
-            $nonSwap->available_window_start_date = $data['available_window_start_date'] ?? $nonSwap->available_window_start_date;
-            $nonSwap->available_window_end_date = $data['available_window_end_date'] ?? $nonSwap->available_window_end_date;
+            $nonSwap->available_window_start_date = $data['available_window_start_date'] ? Carbon::parse($data['available_window_start_date'])->format('Y-m-d') : $nonSwap->available_window_start_date;
+            $nonSwap->available_window_end_date = $data['available_window_end_date'] ? Carbon::parse($data['available_window_end_date'])->format('Y-m-d') : $nonSwap->available_window_end_date;
             $nonSwap->minimum_stay_duration = $data['minimum_stay_duration'] ?? $nonSwap->minimum_stay_duration;
             $nonSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? $nonSwap->maximum_stay_duration;
 
@@ -349,5 +349,62 @@ class NonSwapController extends Controller
             return response()->json(['success'=>false, 'message'=>'Something went wrong']);
         }
 
+    }
+
+    public function search(Request $request)
+    {
+        try {
+            // Initialize query builder
+            $query = NonSwap::query();
+
+            // Handle distance filter (location)
+            if ($request->query('location') === "true") {
+                $subhurb_latitude = $request->subhurb_latitude;
+                $subhurb_longitude = $request->subhurb_longitude;
+
+                if ($subhurb_latitude && $subhurb_longitude) {
+                    // Filter based on latitude and longitude bounding box
+                    $query->whereBetween('place_latitude', [$subhurb_latitude - 0.5, $subhurb_latitude + 0.5])
+                        ->whereBetween('place_longitude', [$subhurb_longitude - 0.5, $subhurb_longitude + 0.5]);
+                }
+            }
+
+            // Handle check-in and check-out dates
+            if ($request->query('check_in') === "true" && $request->query('check_out') === "true") {
+                $checkin = $request->check_in; // Y-m-d
+                $checkout = $request->check_out;
+
+                if ($checkin && $checkout) {
+                    // Ensure there is overlap between available dates and search dates
+                    $query->where('available_window_start_date', '<=', $checkout)
+                        ->where('available_window_end_date', '>=', $checkin);
+                }
+            }
+
+            // Handle guests filter
+            if ($request->query('guests') === "true") {
+                $adult = $request->adult ? (int) $request->adult : 0;
+                $children = $request->children ? (int) $request->children : 0;
+                $infant = $request->infant ? (int) $request->infant : 0;
+                $totalGuests = $adult + $children + $infant;
+
+                if ($totalGuests > 0) {
+                    $query->where('guests', '>=', $totalGuests);
+                }
+            }
+
+            // Execute query and get results
+            $result = $query->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

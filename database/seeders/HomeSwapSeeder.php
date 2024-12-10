@@ -45,8 +45,8 @@ class HomeSwapSeeder extends Seeder
 
                 'open_to_any_location' => false,
 
-                'start_date_to_travel' => '2024-12-20',
-                'end_date_to_travel' => '2024-12-20',
+                'start_date_to_travel' => Carbon::parse('2024-12-20')->format('Y-m-d'),
+                'end_date_to_travel' => Carbon::parse('2024-12-20')->format('Y-m-d'),
                 'swap_type' => 'simultaneous',
 
                 'place_pictures' => json_encode(['https://res.cloudinary.com/funnel/image/upload/v1718602768/properties/g4h9uy1kz8bz4aowqlv2.jpg',
@@ -54,8 +54,8 @@ class HomeSwapSeeder extends Seeder
                 'https://res.cloudinary.com/funnel/image/upload/v1718602767/properties/z8wda983oocrwvlu7ynr.jpg'
                 ]),
 
-                'available_window_start_date' => '2024-12-20',
-                'available_window_end_date' => '2024-12-23',
+                'available_window_start_date' => Carbon::parse('2024-12-20')->format('Y-m-d'),
+                'available_window_end_date' => Carbon::parse('2024-12-23')->format('Y-m-d'),
                 'minimum_stay_duration' => '2',
                 'maximum_stay_duration' => '3',
 
@@ -106,8 +106,8 @@ class HomeSwapSeeder extends Seeder
 
                 'open_to_any_location' => false,
 
-                'start_date_to_travel' => '2024-12-20',
-                'end_date_to_travel' => '2024-12-20',
+                'start_date_to_travel' => Carbon::parse('2024-12-20')->format('Y-m-d'),
+                'end_date_to_travel' => Carbon::parse('2024-12-20')->format('Y-m-d'),
                 'swap_type' => 'simultaneous',
 
                 'place_pictures' => json_encode(['https://res.cloudinary.com/funnel/image/upload/v1718602768/properties/g4h9uy1kz8bz4aowqlv2.jpg',
@@ -115,8 +115,8 @@ class HomeSwapSeeder extends Seeder
                 'https://res.cloudinary.com/funnel/image/upload/v1718602767/properties/z8wda983oocrwvlu7ynr.jpg'
                 ]),
 
-                'available_window_start_date' => '2024-12-20',
-                'available_window_end_date' => '2024-12-23',
+                'available_window_start_date' => Carbon::parse('2024-12-20')->format('Y-m-d'),
+                'available_window_end_date' => Carbon::parse('2024-12-23')->format('Y-m-d'),
                 'minimum_stay_duration' => '2',
                 'maximum_stay_duration' => '3',
 

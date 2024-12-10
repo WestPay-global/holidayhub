@@ -19,6 +19,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'homeswap'], function () {
     Route::get('/all', [HomeSwapController::class, 'allHomeSwap']);
     Route::get('/single/{id}', [HomeSwapController::class, 'singleHomeSwap']);
+    Route::post('/search', [HomeSwapController::class, 'search']);
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/my-all', [HomeSwapController::class, 'myAllHomeSwap']);
@@ -37,6 +38,7 @@ Route::group(['prefix' => 'homeswap'], function () {
 Route::group(['prefix' => 'nonswap'], function () {
     Route::get('/all', [NonSwapController::class, 'allNonSwap']);
     Route::get('/single/{id}', [NonSwapController::class, 'singleNonSwap']);
+    Route::post('/search', [NonSwapController::class, 'search']);
 
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/my-all', [NonSwapController::class, 'myAllNonSwap']);

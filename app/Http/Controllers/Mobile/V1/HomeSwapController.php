@@ -105,8 +105,8 @@ class HomeSwapController extends Controller
 
                 $homeSwap->place_pictures = !empty($data['place_pictures']) ? json_encode($data['place_pictures']) : null;
 
-                $homeSwap->available_window_start_date = $data['available_window_start_date'] ?? null;
-                $homeSwap->available_window_end_date = $data['available_window_end_date'] ?? null;
+                $homeSwap->available_window_start_date = $data['available_window_start_date'] ? Carbon::parse($data['available_window_start_date'])->format('Y-m-d') : null;
+                $homeSwap->available_window_end_date = $data['available_window_end_date'] ? Carbon::parse($data['available_window_end_date'])->format('Y-m-d') : null;
                 $homeSwap->minimum_stay_duration = $data['minimum_stay_duration'] ?? null;
                 $homeSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? null;
 
@@ -164,8 +164,8 @@ class HomeSwapController extends Controller
 
                 $homeSwap->place_pictures = !empty($data['place_pictures']) ? json_encode($data['place_pictures']) : null;
 
-                $homeSwap->available_window_start_date = $data['available_window_start_date'] ?? null;
-                $homeSwap->available_window_end_date = $data['available_window_end_date'] ?? null;
+                $homeSwap->available_window_start_date = $data['available_window_start_date'] ? Carbon::parse($data['available_window_start_date'])->format('Y-m-d') : null;
+                $homeSwap->available_window_end_date = $data['available_window_end_date'] ? Carbon::parse($data['available_window_end_date'])->format('Y-m-d') : null;
                 $homeSwap->minimum_stay_duration = $data['minimum_stay_duration'] ?? null;
                 $homeSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? null;
 
@@ -257,8 +257,8 @@ class HomeSwapController extends Controller
                 $homeSwap->place_pictures = json_encode($data['place_pictures']);
             }
 
-            $homeSwap->available_window_start_date = $data['available_window_start_date'] ?? $homeSwap->available_window_start_date;
-            $homeSwap->available_window_end_date = $data['available_window_end_date'] ?? $homeSwap->available_window_end_date;
+            $homeSwap->available_window_start_date = $data['available_window_start_date'] ? Carbon::parse($data['available_window_start_date'])->format('Y-m-d') : $homeSwap->available_window_start_date;
+            $homeSwap->available_window_end_date = $data['available_window_end_date'] ? Carbon::parse($data['available_window_end_date'])->format('Y-m-d') : $homeSwap->available_window_end_date;
             $homeSwap->minimum_stay_duration = $data['minimum_stay_duration'] ?? $homeSwap->minimum_stay_duration;
             $homeSwap->maximum_stay_duration = $data['maximum_stay_duration'] ?? $homeSwap->maximum_stay_duration;
 
@@ -387,4 +387,62 @@ class HomeSwapController extends Controller
         }
 
     }
+
+    public function search(Request $request)
+    {
+        try {
+            // Initialize query builder
+            $query = HomeSwap::query();
+
+            // Handle distance filter (location)
+            if ($request->query('location') === "true") {
+                $subhurb_latitude = $request->subhurb_latitude;
+                $subhurb_longitude = $request->subhurb_longitude;
+
+                if ($subhurb_latitude && $subhurb_longitude) {
+                    // Filter based on latitude and longitude bounding box
+                    $query->whereBetween('place_latitude', [$subhurb_latitude - 0.5, $subhurb_latitude + 0.5])
+                        ->whereBetween('place_longitude', [$subhurb_longitude - 0.5, $subhurb_longitude + 0.5]);
+                }
+            }
+
+            // Handle check-in and check-out dates
+            if ($request->query('check_in') === "true" && $request->query('check_out') === "true") {
+                $checkin = $request->check_in; // Y-m-d
+                $checkout = $request->check_out;
+
+                if ($checkin && $checkout) {
+                    // Ensure there is overlap between available dates and search dates
+                    $query->where('available_window_start_date', '<=', $checkout)
+                        ->where('available_window_end_date', '>=', $checkin);
+                }
+            }
+
+            // Handle guests filter
+            if ($request->query('guests') === "true") {
+                $adult = $request->adult ? (int) $request->adult : 0;
+                $children = $request->children ? (int) $request->children : 0;
+                $infant = $request->infant ? (int) $request->infant : 0;
+                $totalGuests = $adult + $children + $infant;
+
+                if ($totalGuests > 0) {
+                    $query->where('guests', '>=', $totalGuests);
+                }
+            }
+
+            // Execute query and get results
+            $result = $query->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $result,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
 }

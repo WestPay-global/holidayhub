@@ -55,8 +55,8 @@ return new class extends Migration
             $table->json('place_pictures')->default('place_pictures'); //
 
             //trip length
-            $table->string('available_window_start_date')->nullable();
-            $table->string('available_window_end_date')->nullable();
+            $table->date('available_window_start_date')->nullable();
+            $table->date('available_window_end_date')->nullable();
             $table->string('minimum_stay_duration')->default('minimum_stay_duration');
             $table->json('maximum_stay_duration')->default('maximum_stay_duration');
 
